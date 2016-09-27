@@ -1,5 +1,15 @@
 <link rel="import" href="../polymer/polymer.html">
 
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+
+<link rel="import" href="../tt-offer-selector/tt-offer-selector.html">
+<link rel="import" href="../tt-basket/tt-basket.html">
+<link rel="import" href="../tt-order-persister/tt-order-persister.html">
+<link rel="import" href="../tt-numpad/tt-numpad.html">
+
+<link rel="import" href="tt-page.html">
+
 <!--
 `tt-cashregister`
 Cash register
@@ -8,27 +18,92 @@ Cash register
 -->
 
 <dom-module id="tt-cashregister">
-  <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <h2>Hello [[prop1]]</h2>
-  </template>
+    <template>
+        <style is="custom-style" include="iron-flex iron-flex-alignment">
+            :host {
+                @apply(--layout-horizontal);
+                @apply(--layout-fit);
+            }
+            .offerContainer {
+                @apply(--layout-flex-2);
+            }
 
-  <script>
-    Polymer({
+            .cartPadContainer {
+                @apply(--layout-flex);
+                @apply(--layout-vertical);
+            }
 
-      is: 'tt-cashregister',
+            .cartContainer {
+                @apply(--layout-flex);
+            }
+            .padContainer {
+                @apply(--layout-flex);
+            }
+        </style>
 
-      properties: {
-        prop1: {
-          type: String,
-          value: 'tt-cashregister',
-        },
-      },
+        <tt-offer-selector class="offerContainer" style="background-color: #4caf50"
+                           offers="[[offers]]" on-offer-select="_handleOfferSelect">
+        </tt-offer-selector>
+        <div class="cartPadContainer">
+            <tt-basket id="cart" class="cartContainer" style="background-color: rebeccapurple"></tt-basket>
+            <tt-numpad class="padContainer"></tt-numpad>
 
-    });
-  </script>
+            <h2 on-tap="_onOrderSaveTap">Save</h2>
+            <tt-order-persister id="orderDB"></tt-order-persister>
+        </div>
+
+
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'tt-cashregister',
+
+            properties: {
+                offers: {
+                    type: Array,
+                    value: function () {
+                        return this.generator(44);
+                    },
+                    notify: true
+                },
+            },
+            generator: function (size) {
+
+                var arr = [];
+                var colors = ['grey', 'blue', 'green'];
+                var colorBlue = {
+                    'background-color': '#4285f4',
+                    'color': '#fff'
+                };
+                for (var pas = 1; pas <= size; pas++) {
+                    arr.push({
+                                id: 'o' + pas,
+                                price: {cent: Number((24 * Math.random() * 100).toFixed(0)), currency: 'EUR'},
+                                product: {
+                                    id: 'p' + pas,
+                                    name: 'Product ' + pas
+                                },
+                                colorClass: colors[pas % colors.length],
+                                color: {
+                                    'background-color': '#4285f4',
+                                    'color': '#fff'
+                                }
+                            }
+                    );
+                }
+                return arr;
+            },
+            _onOrderSaveTap: function () {
+                var model = this.$.cart.generateOrder();
+                this.$.orderDB.saveOrder(model);
+            },
+            _handleOfferSelect: function (offer) {
+                console.log('event', offer);
+                this.$.cart.addToCart(offer.detail);
+            }
+
+        });
+    </script>
 </dom-module>

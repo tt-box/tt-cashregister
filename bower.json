@@ -3,7 +3,12 @@
   "description": "Cash register",
   "main": "tt-cashregister.html",
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.4.0"
+    "polymer": "Polymer/polymer#^1.4.0",
+    "tt-basket": "tt-box/tt-basket#master",
+    "tt-offer-selector": "tt-box/tt-offer-selector#master",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.3.1",
+    "tt-order-persister": "tt-box/tt-order-persister",
+    "tt-numpad": "tt-box/tt-numpad"
   },
   "repository": {
     "type": "git",

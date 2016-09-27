@@ -1,0 +1,42 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`tt-page`
+Polymer Element tt-page
+
+@demo demo/index.html 
+-->
+
+<dom-module id="tt-page">
+    <template>
+        <style>
+            :host {
+                @apply(--layout-vertical);
+                background-color: #1e88e5;
+            }
+
+        </style>
+        <h2>Hello [[prop1]]</h2>
+        <div>Item B</div>
+        <div>Item C</div>
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'tt-page',
+
+            hostAttributes: {
+                tabindex: 0
+            },
+
+            properties: {
+                prop1: {
+                    type: String,
+                    value: 'tt-page',
+                },
+            },
+
+        });
+    </script>
+</dom-module>
